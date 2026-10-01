@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="theme-color" content="#0d4f4f" />
+  <title>תאילנד שלי — תכנון טיול</title>
+  <!-- Clean sources hosted on public repo main (verified SHA256 match to /workspace/thailand-trip-app) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/ashergershon148-cell/thailand-trip-app@main/styles.css" />
+</head>
+<body>
+  <div id="app-boot" style="font-family:system-ui;padding:24px;text-align:center;color:#0d4f4f">טוען את תאילנד שלי…</div>
+  <script>
+    // Prefer same-origin copies if present; else load from GitHub CDN.
+    (function () {
+      function load(tag, attrs) {
+        return new Promise(function (resolve, reject) {
+          var el = document.createElement(tag);
+          Object.keys(attrs).forEach(function (k) { el[k] = attrs[k]; });
+          el.onload = resolve; el.onerror = reject;
+          document.head.appendChild(el);
+        });
+      }
+      function tryLocal(href) {
+        return fetch(href, { method: 'HEAD', cache: 'no-store' }).then(function (r) {
+          if (!r.ok) throw new Error('missing');
+          return href;
+        });
+      }
+      var CDN = 'https://cdn.jsdelivr.net/gh/ashergershon148-cell/thailand-trip-app@main/';
+      Promise.resolve()
+        .then(function () { return tryLocal('styles.css').catch(function () { return CDN + 'styles.css'; }); })
+        .then(function (href) {
+          if (href.indexOf('http') === 0) {
+            var l = document.createElement('link'); l.rel = 'stylesheet'; l.href = href; document.head.appendChild(l);
+          }
+        })
+        .then(function () { return tryLocal('data.js').catch(function () { return CDN + 'data.js'; }); })
+        .then(function (href) { return load('script', { src: href }); })
+        .then(function () { return tryLocal('app.js').catch(function () { return CDN + 'app.js'; }); })
+        .then(function (href) { return load('script', { src: href }); })
+        .then(function () {
+          var b = document.getElementById('app-boot'); if (b) b.remove();
+        })
+        .catch(function (e) {
+          var b = document.getElementById('app-boot');
+          if (b) b.textContent = 'שגיאה בטעינה: ' + e;
+        });
+    })();
+  </script>
+</body>
+</html>
